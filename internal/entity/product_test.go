@@ -12,7 +12,7 @@ func TestNewProduct(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, product)
 	assert.Equal(t, "Product 1", product.Name)
-	assert.Equal(t, 100, product.Price)
+	assert.Equal(t, 100.0, product.Price)
 }
 
 func TestProductValidateSuccess(t *testing.T) {
@@ -20,7 +20,7 @@ func TestProductValidateSuccess(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, product)
 	assert.Equal(t, "Product 1", product.Name)
-	assert.Equal(t, 100, product.Price)
+	assert.Equal(t, 100.0, product.Price)
 }
 
 func TestProductValidateError(t *testing.T) {
