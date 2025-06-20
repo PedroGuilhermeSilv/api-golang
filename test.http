@@ -1,11 +1,46 @@
-GET http://localhost:8080/products
+GET http://localhost:8080/products?page=1&limit=2&sort=asc
 
 ###
 
+# @name createProduct
 POST http://localhost:8080/products
 Content-Type: application/json
 
 {
     "name": "Product 1",
     "price": 100
+}
+
+###
+
+
+GET http://localhost:8080/products/32fd3c83-0491-409e-ac14-cb8bc93beb06
+
+###
+
+
+PUT http://localhost:8080/products/32fd3c83-0491-409e-ac14-cb8bc93beb06
+Content-Type: application/json
+
+{
+    "name": "Product 1 Updated",
+    "price": 200
+}
+
+###
+
+DELETE http://localhost:8080/products/97168926-4ed3-4858-a1cc-f63d89e65df3
+
+###
+
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "password": "123456"
 }
