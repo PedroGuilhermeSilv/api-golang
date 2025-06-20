@@ -4,29 +4,13 @@ import (
 	"testing"
 
 	"github.com/PedroGuilhermeSilv/api-golang/internal/entity"
+	"github.com/PedroGuilhermeSilv/api-golang/pkg/testutils"
 	"github.com/stretchr/testify/assert"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
 )
 
-// setupTestDB creates a test database and returns the DB instance and UserDB
-func setupTestDB(t *testing.T) (*gorm.DB, *UserDB) {
-	db, err := gorm.Open(sqlite.Open("file::memory:"), &gorm.Config{})
-	if err != nil {
-		t.Fatalf("failed to open database: %v", err)
-	}
-
-	err = db.AutoMigrate(&entity.User{})
-	if err != nil {
-		t.Fatalf("failed to migrate database: %v", err)
-	}
-
-	userDb := NewUserDB(db)
-	return db, userDb
-}
-
 func TestUserDBCreateSuccess(t *testing.T) {
-	db, userDb := setupTestDB(t)
+	db := testutils.SetupTestDB(t, &entity.User{})
+	userDb := NewUserDB(db)
 
 	user, _ := entity.NewUser("John Doe", "john.doe@example.com", "123456")
 
@@ -43,7 +27,8 @@ func TestUserDBCreateSuccess(t *testing.T) {
 }
 
 func TestUserDBFindByEmailSuccess(t *testing.T) {
-	_, userDb := setupTestDB(t)
+	db := testutils.SetupTestDB(t, &entity.User{})
+	userDb := NewUserDB(db)
 
 	user, _ := entity.NewUser("John Doe", "john.doe@example.com", "123456")
 
