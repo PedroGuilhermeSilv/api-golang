@@ -1,4 +1,5 @@
 GET http://localhost:8080/products?page=1&limit=2&sort=asc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTA0MzMzMDYsInN1YiI6ImQ5NTAxY2FiLTlhMjQtNGM4NC1hNmM3LTgxOTcxM2E1ODI2NiJ9.pfHGZxEjgy3YWAm39Hub83rMkygCDJEm-q9rvGlzXjY
 
 ###
 
