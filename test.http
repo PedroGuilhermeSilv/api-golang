@@ -44,3 +44,13 @@ Content-Type: application/json
     "email": "john.doe@example.com",
     "password": "123456"
 }
+
+###
+
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+    "email": "john.doe@example.com",
+    "password": "123456"
+}

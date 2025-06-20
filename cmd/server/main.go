@@ -14,7 +14,7 @@ import (
 )
 
 func main() {
-	_, err := configs.LoadConfig(".")
+	config, err := configs.LoadConfig(".")
 	if err != nil {
 		log.Fatalf("Error loading config: %v", err)
 	}
@@ -26,13 +26,15 @@ func main() {
 	productDB := database.NewProductDB(db)
 	productHandler := handlers.NewProductHandler(productDB)
 	userDB := database.NewUserDB(db)
-	userHandler := handlers.NewUserHandler(userDB)
+	userHandler := handlers.NewUserHandler(userDB, config.TokenAuth, config.JwtExpiredTime)
 	r := chi.NewRouter()
 	r.Post("/products", productHandler.CreateProduct)
 	r.Get("/products/{id}", productHandler.GetProduct)
 	r.Put("/products/{id}", productHandler.UpdateProduct)
 	r.Delete("/products/{id}", productHandler.DeleteProduct)
 	r.Get("/products", productHandler.ListProducts)
+
 	r.Post("/users", userHandler.CreateUser)
+	r.Post("/auth/login", userHandler.Login)
 	http.ListenAndServe(":8080", r)
 }
