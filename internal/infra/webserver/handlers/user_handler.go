@@ -11,37 +11,56 @@ import (
 	"github.com/go-chi/jwtauth"
 )
 
+type Error struct {
+	Message string `json:"message"`
+}
+
 type UserHandler struct {
-	UserDB       database.UserRepositoryInterface
-	Jwt          *jwtauth.JWTAuth
-	JwtExpiresIn int
+	UserDB database.UserRepositoryInterface
 }
 
-func NewUserHandler(db database.UserRepositoryInterface, jwt *jwtauth.JWTAuth, jwtExpiresIn int) *UserHandler {
-	return &UserHandler{UserDB: db, Jwt: jwt, JwtExpiresIn: jwtExpiresIn}
+func NewUserHandler(db database.UserRepositoryInterface) *UserHandler {
+	return &UserHandler{UserDB: db}
 }
 
+// @Summary Login a user
+// @Description Login a user
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param user body dto.UserLoginInput true "User to login"
+// @Success 200 {object} dto.UserLoginOutput
+// @Failure 400 {object} Error
+// @Router /auth/login [post]
 func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 	var user dto.UserLoginInput
+	jwt := r.Context().Value("jwt").(*jwtauth.JWTAuth)
+	jwtExpiresIn := r.Context().Value("jwtExpiresIn").(int)
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		error := Error{Message: err.Error()}
+		json.NewEncoder(w).Encode(error)
 		return
 	}
 	userEntity, err := h.UserDB.FindByEmail(user.Email)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		w.WriteHeader(http.StatusNotFound)
+		error := Error{Message: err.Error()}
+		json.NewEncoder(w).Encode(error)
 		return
 	}
 	if !userEntity.ValidatePassword(user.Password) {
-		http.Error(w, "Invalid password", http.StatusUnauthorized)
+		w.WriteHeader(http.StatusUnauthorized)
+		error := Error{Message: "Invalid password"}
+		json.NewEncoder(w).Encode(error)
 		return
 	}
 	mapClaims := map[string]interface{}{
 		"sub": userEntity.ID.String(),
-		"exp": time.Now().Add(time.Second * time.Duration(h.JwtExpiresIn)).Unix(),
+		"exp": time.Now().Add(time.Second * time.Duration(jwtExpiresIn)).Unix(),
 	}
-	_, tokenString, _ := h.Jwt.Encode(mapClaims)
+	_, tokenString, _ := jwt.Encode(mapClaims)
 	acessToken := struct {
 		AccessToken string `json:"access_token"`
 	}{AccessToken: tokenString}
@@ -49,6 +68,16 @@ func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(acessToken)
 }
+
+// @Summary Create a new user
+// @Description Create a new user
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param user body dto.UserCreateInput true "User to create"
+// @Success 201 {object} entity.User
+// @Failure 400 {object} Error
+// @Router /users [post]
 func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	var user dto.UserCreateInput
 	err := json.NewDecoder(r.Body).Decode(&user)
@@ -58,12 +87,16 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 	userEntity, err := entity.NewUser(user.Name, user.Email, user.Password)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		error := Error{Message: err.Error()}
+		json.NewEncoder(w).Encode(error)
 		return
 	}
 	err = h.UserDB.Create(userEntity)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		error := Error{Message: err.Error()}
+		json.NewEncoder(w).Encode(error)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")

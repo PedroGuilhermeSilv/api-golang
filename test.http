@@ -1,5 +1,5 @@
 GET http://localhost:8080/products?page=1&limit=2&sort=asc
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTA0MzMzMDYsInN1YiI6ImQ5NTAxY2FiLTlhMjQtNGM4NC1hNmM3LTgxOTcxM2E1ODI2NiJ9.pfHGZxEjgy3YWAm39Hub83rMkygCDJEm-q9rvGlzXjY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTA0NjYwMzAsInN1YiI6ImQ5NTAxY2FiLTlhMjQtNGM4NC1hNmM3LTgxOTcxM2E1ODI2NiJ9.b8VOTZp7LQwMY_wCGhgdSC7n_oe1W0f9QdoSBWtnZRM
 
 ###
 
@@ -16,7 +16,7 @@ Content-Type: application/json
 
 
 GET http://localhost:8080/products/32fd3c83-0491-409e-ac14-cb8bc93beb06
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTA0NjY1MzcsInN1YiI6ImQ5NTAxY2FiLTlhMjQtNGM4NC1hNmM3LTgxOTcxM2E1ODI2NiJ9.cvI5z0mq7WM67gFrasdlltj9-3koZPHI6oI3GyVXG2o
 ###
 
 

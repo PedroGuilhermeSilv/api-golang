@@ -31,3 +31,15 @@ type UserLoginInput struct {
 type UserLoginOutput struct {
 	AccessToken string `json:"access_token"`
 }
+
+type ProductUpdateInput struct {
+	ID    string  `json:"id"`
+	Name  string  `json:"name"`
+	Price float64 `json:"price"`
+}
+
+type ProductUpdateOutput struct {
+	ID    string  `json:"id"`
+	Name  string  `json:"name"`
+	Price float64 `json:"price"`
+}
