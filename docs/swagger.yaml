@@ -224,7 +224,7 @@ paths:
         name: product
         required: true
         schema:
-          $ref: '#/definitions/entity.Product'
+          $ref: '#/definitions/dto.ProductCreateInput'
       produces:
       - application/json
       responses:

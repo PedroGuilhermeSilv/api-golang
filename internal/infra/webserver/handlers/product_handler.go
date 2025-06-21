@@ -89,7 +89,7 @@ func (h *ProductHandler) GetProduct(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Produce json
 // @Param id path string true "Product ID"
-// @Param product body entity.Product true "Product to update"
+// @Param product body dto.ProductCreateInput  true "Product to update"
 // @Success 200 {object} entity.Product
 // @Failure 400 {object} Error
 // @Router /products/{id} [put]

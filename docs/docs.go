@@ -228,7 +228,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.Product"
+                            "$ref": "#/definitions/dto.ProductCreateInput"
                         }
                     }
                 ],
